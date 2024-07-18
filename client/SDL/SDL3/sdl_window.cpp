@@ -19,6 +19,7 @@
  */
 #include "sdl_window.hpp"
 #include "sdl_utils.hpp"
+#include <SDL3/SDL_pixels.h>
 
 SdlWindow::SdlWindow(const std::string& title, Sint32 startupX, Sint32 startupY, Sint32 width,
                      Sint32 height, Uint32 flags)
@@ -169,7 +170,7 @@ bool SdlWindow::fill(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 	if (!surface)
 		return false;
 	SDL_Rect rect = { 0, 0, surface->w, surface->h };
-	auto color = SDL_MapRGBA(surface->format, r, g, b, a);
+	auto color = SDL_MapRGBA(SDL_GetPixelFormatDetails(surface->format), nullptr, r, g, b, a);
 
 	SDL_FillSurfaceRect(surface, &rect, color);
 	return true;

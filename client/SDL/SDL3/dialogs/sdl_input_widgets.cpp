@@ -152,10 +152,11 @@ int SdlInputWidgetList::run(std::vector<std::string>& result)
 			{
 				case SDL_EVENT_KEY_UP:
 				{
-					auto it = std::remove(pressed.begin(), pressed.end(), event.key.keysym.sym);
+					// https://github.com/libsdl-org/SDL/commit/0dd579d40d0a2940ad1c3e2e846c99c1c5bb4587
+					auto it = std::remove(pressed.begin(), pressed.end(), event.key.key);
 					pressed.erase(it, pressed.end());
 
-					switch (event.key.keysym.sym)
+					switch (event.key.mod)
 					{
 						case SDLK_BACKSPACE:
 						{
@@ -180,7 +181,7 @@ int SdlInputWidgetList::run(std::vector<std::string>& result)
 							running = false;
 							res = INPUT_BUTTON_CANCEL;
 							break;
-						case SDLK_v:
+						case SDLK_V:
 							if (pressed.size() == 2)
 							{
 								if ((pressed[0] == SDLK_LCTRL) || (pressed[0] == SDLK_RCTRL))
@@ -200,7 +201,7 @@ int SdlInputWidgetList::run(std::vector<std::string>& result)
 				}
 				break;
 				case SDL_EVENT_KEY_DOWN:
-					pressed.push_back(event.key.keysym.sym);
+					pressed.push_back(event.key.mod);
 					break;
 				case SDL_EVENT_TEXT_INPUT:
 				{
@@ -258,9 +259,9 @@ int SdlInputWidgetList::run(std::vector<std::string>& result)
 			if (LastActiveTextInput != CurrentActiveTextInput)
 			{
 				if (CurrentActiveTextInput < 0)
-					SDL_StopTextInput();
+					SDL_StopTextInput(_window);
 				else
-					SDL_StartTextInput();
+					SDL_StartTextInput(_window);
 				LastActiveTextInput = CurrentActiveTextInput;
 			}
 

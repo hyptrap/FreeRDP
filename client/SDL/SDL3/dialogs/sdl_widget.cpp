@@ -251,11 +251,8 @@ bool SdlWidget::update_text(SDL_Renderer* renderer, const std::string& text, SDL
 	{
 		texture = _image;
 		dst = _rect;
-		int w = 0;
-		int h = 0;
-		auto rc = SDL_QueryTexture(_image, nullptr, nullptr, &w, &h);
-		src.w = w;
-		src.h = h;
+		// https://github.com/libsdl-org/SDL/blob/e949f12f63cdfcef4bdf456936ee676e0a3f9de6/docs/README-migration.md?plain=1#L1270
+		auto rc = SDL_GetTextureSize(_image, &src.w, &src.h);
 		if (rc < 0)
 			widget_log_error(rc, "SDL_QueryTexture");
 	}

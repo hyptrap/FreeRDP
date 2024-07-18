@@ -41,7 +41,6 @@
 #include "dialogs/sdl_connection_dialog.hpp"
 
 using SDLSurfacePtr = std::unique_ptr<SDL_Surface, decltype(&SDL_DestroySurface)>;
-using SDLPixelFormatPtr = std::unique_ptr<SDL_PixelFormat, decltype(&SDL_DestroyPixelFormat)>;
 
 class SdlContext
 {
@@ -76,9 +75,11 @@ class SdlContext
 	sdlClip clip;
 
 	SDLSurfacePtr primary;
-	SDLPixelFormatPtr primary_format;
+	// https://github.com/libsdl-org/SDL/commit/2ba76dbe803f8e76ee02f15e80d6dda3d9177845
+	// https://github.com/libsdl-org/SDL/commit/131108ee4848c254c9d333450ce50f0efc42017e
+	const SDL_PixelFormatDetails* primary_format;
 
-	SDL_PixelFormatEnum sdl_pixel_format = SDL_PIXELFORMAT_UNKNOWN;
+	SDL_PixelFormat sdl_pixel_format = SDL_PIXELFORMAT_UNKNOWN;
 
 	std::unique_ptr<SDLConnectionDialog> connection_dialog;
 
